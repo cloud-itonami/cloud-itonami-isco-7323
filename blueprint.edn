@@ -1,0 +1,11 @@
+[{:itonami.blueprint/social-impact [:worker-safety :print-quality :production-continuity]
+  :itonami.blueprint/domain :manufacturing/print-finishing-binding-workshop-scheduling-coordination
+  :itonami.blueprint/required-technologies [:robotics :identity :audit-ledger]
+  :itonami.blueprint/isco-08 "7323"
+  :itonami.blueprint/name "Print Finishing and Binding Workshop Scheduling Coordination Practice"
+  :itonami.blueprint/governor :print-finishing-binding-worker-governor
+  :itonami.blueprint/robotics true
+  :db/id -1
+  :itonami.blueprint/status :public-oss
+  :itonami.blueprint/id "cloud-itonami-isco-7323"
+  :itonami.blueprint/license "AGPL-3.0-or-later"}]
