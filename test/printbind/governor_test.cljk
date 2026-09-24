@@ -1,5 +1,5 @@
 (ns printbind.governor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [printbind.store :as store]
             [printbind.advisor :as advisor]
             [printbind.governor :as governor]))
