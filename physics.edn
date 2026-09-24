@@ -1,0 +1,45 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a workshop scheduling/logistics coordination
+;; robot handles crew scheduling, task/materials-usage records and binding-
+;; materials supply orders for a print finishing and binding crew (ISCO 7323).
+;; Its physical work: bringing pallets of printed sheets to the guillotine and
+;; folder, lifting book blocks onto the binder infeed, and melting hot-melt
+;; adhesive in the binder's glue pot.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-7323"
+ :cases
+ [{:id :sheets-pallet-to-guillotine
+   :kind :transport
+   :procedure "pallet robot brings a pallet of printed sheets from the press to the guillotine"
+   :params {:mass-kg 250.0 :distance-m 30.0 :v-max-mps 1.0 :a-max-mps2 0.3
+            :brake-decel-mps2 0.5 :drive-force-n 700.0 :crr 0.012
+            :cog-height-m 0.25 :support-half-length-m 0.50 :payload-cog-height-m 0.60
+            :max-time-s 1800.0}
+   :sweep {:param :payload-kg :values [100.0 300.0 600.0 900.0 1200.0]}
+   :quantity :cycle-time-s
+   :limit {:max 50.0 :basis "estimate: one press-to-guillotine leg before the cutter runs out of work"}
+   :boundary {:lo 50.0 :hi 5000.0}}
+  {:id :book-blocks-onto-binder
+   :kind :manipulator
+   :procedure "arm lifts a stack of gathered book blocks from the pallet onto the perfect-binder infeed"
+   :params {:l1-m 0.50 :l2-m 0.45 :m1-kg 5.0 :m2-kg 4.0
+            :from [0.50 0.05] :to [0.70 0.45] :duration-s 2.5 :steps 500}
+   :sweep {:param :payload-kg :values [1.0 2.5 4.0 6.0 9.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 60.0 :basis "estimate: continuous shoulder torque of a light collaborative arm (~5 kg class)"}
+   :boundary {:lo 0.1 :hi 30.0}}
+  {:id :hot-melt-glue-pot
+   :kind :thermal
+   :procedure "a slab of EVA hot-melt adhesive in the 180 C glue pot until its far face reaches 160 C (latent heat not modelled)"
+   :params {:thickness-m 0.02 :conductivity-w-mk 0.20 :density-kg-m3 950.0 :specific-heat-j-kgk 2000.0
+            :t0-c 20.0 :t-hot-c 180.0 :front-fixed? true :h-back-w-m2k 5.0 :t-back-ambient-c 180.0
+            :threshold-c 160.0 :duration-s 14400.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.005 0.01 0.02 0.03 0.04]}
+   :quantity :time-to-threshold-s
+   :limit {:max 1800.0 :basis "estimate: 30-minute warm-up before the binder may start; the adhesive maker's data sheet and melting enthalpy are the sources to use"}
+   :boundary {:lo 0.002 :hi 0.06}}]}
