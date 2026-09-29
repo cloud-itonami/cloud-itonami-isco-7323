@@ -1,7 +1,7 @@
 (ns printbind.store
   "SSoT for the ISCO-08 7323 print-finishing/bindery workshop
   scheduling/logistics coordination actor (itonami actor pattern,
-  ADR-2607121000 / CLAUDE.md Actors section; README's 'Robotics
+  ADR-2607121000 / AGENTS.md Actors section; README's 'Robotics
   premise' — a workshop scheduling/logistics coordination robot
   performs crew scheduling, task/materials-usage/progress-record
   logging and binding-materials supply-order coordination for a print
